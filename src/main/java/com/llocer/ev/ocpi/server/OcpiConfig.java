@@ -20,7 +20,7 @@ public class OcpiConfig {
 	public Whitelist allowedWhitelist = Whitelist.ALWAYS;
 	public Boolean keepInvitationTokens = true;
 	public String dataBackend = "com.llocer.redis.RedisMapFactory";
-	public boolean testing = true;
+	public boolean testing = false;
 
 	private static final ObjectMapper mapper = new ObjectMapper();
 	private static final ObjectReader reader = mapper.readerFor(OcpiConfig.class);

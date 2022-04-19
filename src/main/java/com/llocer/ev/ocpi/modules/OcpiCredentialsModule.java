@@ -11,6 +11,7 @@ import com.llocer.common.Log;
 import com.llocer.common.SimpleMap;
 import com.llocer.ev.ocpi.msgs22.OcpiCredentials;
 import com.llocer.ev.ocpi.msgs22.OcpiCredentialsRole;
+import com.llocer.ev.ocpi.msgs22.OcpiEndpoint.Identifier;
 import com.llocer.ev.ocpi.msgs22.OcpiEndpoints;
 import com.llocer.ev.ocpi.msgs22.OcpiVersions;
 import com.llocer.ev.ocpi.server.OcpiAgentId;
@@ -58,6 +59,47 @@ public class OcpiCredentialsModule {
 		return linksByToken.get( authorizationToken );
 	}
 
+	private OcpiResultEnum queryEndpoints( OcpiLink link ) throws Exception {
+		// query peer versions
+		OcpiVersions[] versions = link.makeBuilder()
+				.uri( link.peerCredentials.getUrl() )
+				.method​( HttpMethod.GET, null )
+				.send( OcpiVersions[].class );
+		if( versions == null ) return OcpiResultEnum.FAILED_GET_VERSION;
+		Log.debug("OcpiCredentialsModule.queryEndpoints: version=%s--%s", versions[0].getVersion(), versions[0].getUrl() );
+
+		// look for a supported version
+		URI endpoints221Url = null;
+		for( OcpiVersions v : versions ) {
+			if( v.getVersion() == OcpiEndpoints.Version._2_2_1 ) {
+				endpoints221Url  = v.getUrl();
+				break;
+			}
+		}
+		if( endpoints221Url == null ) return OcpiResultEnum.UNSUPPORTED_VERSION;
+
+		// query peer endpoints
+		link.peerEndpoints = link.makeBuilder()
+				.uri( endpoints221Url )
+				.method​( HttpMethod.GET, null )
+				.send( OcpiEndpoints.class );
+		if( link.peerEndpoints == null ) return OcpiResultEnum.FAILED_GET_VERSION;
+
+		return OcpiResultEnum.OK;
+	}
+	
+	public OcpiResultEnum sendCredentials(  OcpiLink link ) throws Exception {
+		OcpiResultEnum res = queryEndpoints( link );
+		if( res != OcpiResultEnum.OK ) return res;
+
+		link.peerCredentials = link.makeBuilder()
+				.uri( Identifier.CREDENTIALS )
+				.method​( HttpMethod.POST, link.ownCredentials )
+				.send( OcpiCredentials.class );
+		
+		return OcpiResultEnum.OK;
+	}
+	
 	public OcpiResult<?> commonInterface( OcpiRequestData oreq ) throws Exception {
 		switch( oreq.method ) {
 		case POST: // login
@@ -95,31 +137,11 @@ public class OcpiCredentialsModule {
 		
 		oreq.link.peerCredentials = newCredentials;
 		
-		// query peer versions
-		OcpiVersions[] versions = oreq.link.makeBuilder()
-				.uri( newCredentials.getUrl() )
-				.method​( HttpMethod.GET, null )
-				.send( OcpiVersions[].class );
-		if( versions == null ) return OcpiResultEnum.FAILED_GET_VERSION;
-		Log.debug("Ocpi221.credentials.post: version=%s--%s", versions[0].getVersion(), versions[0].getUrl() );
+		// query peer versions & endpoints
+		OcpiResultEnum res = queryEndpoints( oreq.link );
+		if( res != OcpiResultEnum.OK ) return res;
 
-		// look for a supported version
-		URI endpoints221Url = null;
-		for( OcpiVersions v : versions ) {
-			if( v.getVersion() == OcpiEndpoints.Version._2_2_1 ) {
-				endpoints221Url  = v.getUrl();
-				break;
-			}
-		}
-		if( endpoints221Url == null ) return OcpiResultEnum.UNSUPPORTED_VERSION;
-
-		// query peer endpoints
-		oreq.link.peerEndpoints = oreq.link.makeBuilder()
-				.uri( endpoints221Url )
-				.method​( HttpMethod.GET, null )
-				.send( OcpiEndpoints.class );
-		if( oreq.link.peerEndpoints == null ) return OcpiResultEnum.FAILED_GET_VERSION;
-
+		// generate new token 
 		synchronized( linksByToken ) {
 			String newToken;
 			if( OcpiConfig.config.testing ) {
@@ -162,7 +184,7 @@ public class OcpiCredentialsModule {
 	private static String abc = initABC();
 	private static Random rnd = new SecureRandom();
 
-	private static String makeRandomToken() {
+	public static String makeRandomToken() {
 		StringBuffer res = new StringBuffer();
 		res.append( "Token G"); // all generated tokens start by G
 		

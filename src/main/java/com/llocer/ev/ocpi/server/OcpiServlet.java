@@ -124,7 +124,10 @@ public abstract class OcpiServlet extends HttpServlet {
 
 		if( uriIdx == uri.length ) {
 			// .../ : get versions
-			return( oreq.method == HttpMethod.GET ? OcpiResult.success(getVersions()) : OcpiResultEnum.METHOD_NOT_ALLOWED );
+			OcpiVersions[] versions = getVersions();
+			return( oreq.method == HttpMethod.GET ? 
+						OcpiResult.success( versions ) : 
+						OcpiResultEnum.METHOD_NOT_ALLOWED );
 		} 
 		
 		if ( uriIdx+1 == uri.length ) {

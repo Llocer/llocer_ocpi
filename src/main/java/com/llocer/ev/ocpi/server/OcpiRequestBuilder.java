@@ -28,7 +28,7 @@ public class OcpiRequestBuilder {
 		
 		builder = HttpRequest.newBuilder()	            
 					.version( HttpClient.Version.HTTP_2 )
-					.setHeader("Authorization", "Token "+link.peerCredentials.getToken() );			
+					.setHeader("Authorization", link.peerCredentials.getToken() );			
 
 		if( link.ownId != null ) {
 			builder = builder
