@@ -7,20 +7,16 @@ import java.net.URISyntaxException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.llocer.common.Log;
-import com.llocer.ev.ocpi.msgs22.OcpiToken.Whitelist;
 
 
 
 public class OcpiConfig {
-	private static String configFile = "/opt/llocer/ev/etc/ocpi.conf";
+	private static String configFile = "/etc/ocpi.conf";
 	
-	public String publicUrl = "http://127.0.0.1:8080/llocer_cso_war/";
-	public Integer privateUriLength = 3; // /llocer_cso_war/cso/ocpi
-	public Integer ocpiMaxGetLimit = 100;
-	public Whitelist allowedWhitelist = Whitelist.ALWAYS;
-	public Boolean keepInvitationTokens = true;
-	public String dataBackend = "com.llocer.redis.RedisMapFactory";
-	public boolean testing = false;
+	public String public_url = "http://127.0.0.1:8080/llocer/";
+	public Integer private_url_length = 1; // /llocer_cso_war
+	public Integer pagination_limit = 100;
+	public boolean testing_no_change_credentials = false;
 
 	private static final ObjectMapper mapper = new ObjectMapper();
 	private static final ObjectReader reader = mapper.readerFor(OcpiConfig.class);
@@ -30,15 +26,15 @@ public class OcpiConfig {
 	private static OcpiConfig readConfig() {
 		try {
 			return reader.readValue( new File( configFile )  );
-		} catch (Exception e2) {
-			Log.warning( "unable to read config file "+ configFile );
+		} catch (Exception e) {
+			Log.warning( e, "unable to read config file "+ configFile );
 			return new OcpiConfig();
 		}
 	}
 
 	public static URI getPublicURI() {
 		try {
-			return new URI( config.publicUrl );
+			return new URI( config.public_url );
 		} catch (URISyntaxException e) {
 			return null;
 		}

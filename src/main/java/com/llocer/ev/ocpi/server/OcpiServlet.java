@@ -120,7 +120,7 @@ public abstract class OcpiServlet extends HttpServlet {
 		String uri[] = uri_s.split("/"); 
 		
 		int uriIdx = ( uri.length > 0 && uri[0].isEmpty() ? 1 : 0 ); // /... : first empty element
-		uriIdx += OcpiConfig.config.privateUriLength;
+		uriIdx += OcpiConfig.config.private_url_length+2;
 
 		if( uriIdx == uri.length ) {
 			// .../ : get versions

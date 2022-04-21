@@ -144,7 +144,7 @@ public class OcpiCredentialsModule {
 		// generate new token 
 		synchronized( linksByToken ) {
 			String newToken;
-			if( OcpiConfig.config.testing ) {
+			if( OcpiConfig.config.testing_no_change_credentials ) {
 				newToken = oreq.link.ownCredentials.getToken();
 			} else {
 				// generate a new own token

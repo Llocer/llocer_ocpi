@@ -10,13 +10,14 @@ import com.llocer.ev.ocpi.msgs.HasLastUpdated;
 import com.llocer.ev.ocpi.msgs22.OcpiEndpoint;
 import com.llocer.ev.ocpi.msgs22.OcpiEndpoint.Identifier;
 import com.llocer.ev.ocpi.msgs22.OcpiEndpoint.InterfaceRole;
+import com.llocer.ev.ocpi.server.OcpiConfig;
 import com.llocer.ev.ocpi.server.OcpiRequestData;
 import com.llocer.ev.ocpi.server.OcpiResult;
 import com.llocer.ev.ocpi.server.OcpiResult.OcpiResultEnum;
 
 public interface OcpiSender {
 	URI getOcpiModuleUri(InterfaceRole role, Identifier module);
-	int getOcpiPaginationLimit( Identifier module );
+	default int getOcpiPaginationLimit( Identifier module ) { return OcpiConfig.config.pagination_limit; }
 	Iterator<? extends HasLastUpdated> getOcpiItems(OcpiRequestData oreq);
 
 	static class LastUpdatedComparator implements Comparator<HasLastUpdated> {
