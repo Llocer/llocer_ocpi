@@ -12,8 +12,8 @@ See repository [llocer_ev_examples](https://github.com/Llocer/llocer_ev_examples
 Optional configuration file is /etc/ocpi.conf. It must be in json format. The default is:
 
     {
-	    "public_url": "http://127.0.0.1:8080/llocer_cso_war/",
-	    "private_uri_length": 1,
+	    "public_url": "http://127.0.0.1:8080",
+	    "private_uri_length": 0,
 	    "pagination_limit": 100,
 	    "testing_no_change_credentials": false
     }
