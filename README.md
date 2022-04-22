@@ -35,10 +35,6 @@ Assume you public server address is "https://my.com/cso". The loadbalancer redir
 
 ## URL of module interfaces
 
-The URL's for the OCPI modules follows the syntax:
-
-`<public_url>/<servlet path>/<module>/<ocpi path arguments>`
-
 Following with the same example, if the OCPI servlet is defined in web.xml as:
 
     <servlet-mapping>
@@ -46,11 +42,20 @@ Following with the same example, if the OCPI servlet is defined in web.xml as:
          <url-pattern>/ocpi/*</url-pattern>
     </servlet-mapping>
  
-a location PUT to the receiver interface with countryCode=ES, partyId=PID and locationId=myLocation must use the following address:
 
-`https://my.com/cso/ocpi/locations/ES/PID/myLocation`
-
-and the usual initial Versions query must be sent to:
+the initial versions query must be sent to:
 
 `https://my.com/cso/ocpi`
+
+and the endpoints query for OCPI 2.2.1 must be sent to:
+
+`https://my.com/cso/ocpi/221`
+
+The URL's for the OCPI modules follows the syntax:
+
+`<public_url>/<servlet path>/<OCPI version>/<module>/<ocpi path arguments>`
+
+by example, a location PUT to the receiver interface with countryCode=ES, partyId=PID and locationId=myLocation must use the following address:
+
+`https://my.com/cso/ocpi/221/locations/ES/PID/myLocation`
 
