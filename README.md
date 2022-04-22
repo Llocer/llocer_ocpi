@@ -33,18 +33,20 @@ Assume you public server address is "https://my.com/cso". The loadbalancer redir
 - "public_url": "https://my.com/cso"
 - "private_url_length": 2 (number of elements in "/foo/bar")
 
+## URL of module interfaces
+
 The URL's for the OCPI modules follows the syntax:
 
 `<public_url>/<servlet path>/<module>/<ocpi path arguments>`
 
-following with the same example, if the OCPI sevlet is defined in web.xml as:
+Following with the same example, if the OCPI servlet is defined in web.xml as:
 
     <servlet-mapping>
          <servlet-name>CpoOcpiServlet</servlet-name>
          <url-pattern>/ocpi/*</url-pattern>
     </servlet-mapping>
  
-a location PUT to the receiver interface with country code = ES, party Id = PID and locationId = myLocation must use the following address:
+a location PUT to the receiver interface with countryCode=ES, partyId=PID and locationId=myLocation must use the following address:
 
 `https://my.com/cso/ocpi/locations/ES/PID/myLocation`
 
