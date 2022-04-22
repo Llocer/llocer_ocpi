@@ -1,9 +1,10 @@
 # llocer_ocpi
 
-OCPI implementation:
-- http client
-- http servlet
-- OCPI modules
+llocer_ocpi is a Free and Open Source Software that allows implementation of OCPI 2.2.1 nodes.
+
+The librarian elements can be split in two levels:
+- the HTTP servlet to handle OCPI request and the HTTP request builder to send OCPI request.
+- the implementation of the OCPI sender/receiver interfaces described in the specification. 
 
 See repository [llocer_ev_examples](https://github.com/Llocer/llocer_ev_examples) for usage examples.
 
