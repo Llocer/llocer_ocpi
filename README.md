@@ -28,7 +28,7 @@ where:
 
 Example:
 
-Assume you public server address is "https://my.com/cso". The loadbalancer redirects the request to a private server with address "https://192.168.21.21:8080/foo/bar" and you have an OCPI servlet serving request on it at "https://192.168.21.21:8080/foo/bar/cso/ocpi/...". Configuration must be:
+Assume you public server address is "https://my.com/cso". The loadbalancer redirects the request to a private server with address "https://192.168.21.21:8080/foo/bar" and you have an OCPI servlet serving request on it at "http://192.168.21.21:8080/foo/bar/cso/ocpi/...". Configuration must be:
 
 - "public_url": "https://my.com/cso"
 - "private_url_length": 2 (number of elements in "/foo/bar")
