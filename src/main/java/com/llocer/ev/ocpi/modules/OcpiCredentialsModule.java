@@ -168,13 +168,13 @@ public class OcpiCredentialsModule {
 	private static String initABC() {
 		StringBuffer res = new StringBuffer();
 		
+		for( int i = '0'; i<='9'; i++ ) {
+			res.append( Character.toString( i ) );
+		}
 		for( int i = 'A'; i<='Z'; i++ ) {
 			res.append( Character.toString( i ) );
 		}
 		for( int i = 'a'; i<='z'; i++ ) {
-			res.append( Character.toString( i ) );
-		}
-		for( int i = '0'; i<='9'; i++ ) {
 			res.append( Character.toString( i ) );
 		}
 		
@@ -186,12 +186,9 @@ public class OcpiCredentialsModule {
 
 	public static String makeRandomToken() {
 		StringBuffer res = new StringBuffer();
-		res.append( "Token G"); // all generated tokens start by G
+		res.append( "Token RND"); // all generated tokens start by RND
 		
-		int v = 1+rnd.nextInt( abc.length()-1 ); // generated codes never starts by A
-		res.append( abc.charAt(v) );
-		
-		for( int i = 1; i<62; i++ ) {
+		for( int i = 1; i<60; i++ ) {
 			v = rnd.nextInt( abc.length() );
 			res.append( abc.charAt(v) );
 		}
