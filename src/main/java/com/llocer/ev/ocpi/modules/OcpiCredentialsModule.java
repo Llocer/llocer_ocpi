@@ -189,7 +189,7 @@ public class OcpiCredentialsModule {
 		res.append( "Token RND"); // all generated tokens start by RND
 		
 		for( int i = 1; i<60; i++ ) {
-			v = rnd.nextInt( abc.length() );
+			int v = rnd.nextInt( abc.length() );
 			res.append( abc.charAt(v) );
 		}
 		
